@@ -1,8 +1,10 @@
-module github.com/hackmdio/go-client
+module sample-usage
 
 go 1.20
 
-require github.com/imroc/req/v3 v3.34.0
+replace github.com/hackmdio/go-client => ../..
+
+require github.com/hackmdio/go-client v0.0.0-00010101000000-000000000000
 
 require (
 	github.com/go-task/slim-sprig v0.0.0-20230315185526-52ccab3ef572 // indirect
@@ -10,6 +12,7 @@ require (
 	github.com/google/pprof v0.0.0-20230429030804-905365eefe3e // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
+	github.com/imroc/req/v3 v3.34.0 // indirect
 	github.com/onsi/ginkgo/v2 v2.9.2 // indirect
 	github.com/quic-go/qpack v0.4.0 // indirect
 	github.com/quic-go/qtls-go1-19 v0.3.2 // indirect
