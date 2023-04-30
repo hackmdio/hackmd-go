@@ -81,11 +81,11 @@ type User struct {
 }
 
 type SimpleUserProfile struct {
-	Name      string    `json:"name"`
-	UserPath  string    `json:"userPath"`
-	Photo     string    `json:"photo"`
-	Biography *string   `json:"biography,omitempty"`
-	CreatedAt time.Time `json:"createdAt"`
+	Name      string  `json:"name"`
+	UserPath  string  `json:"userPath"`
+	Photo     string  `json:"photo"`
+	Biography *string `json:"biography,omitempty"`
+	CreatedAt int64   `json:"createdAt"`
 }
 
 type Note struct {
@@ -149,6 +149,7 @@ func (c *APIClient) GetMe() (*User, error) {
 	resp, err := c.client.
 		DevMode().
 		R().SetSuccessResult(&user).Get(c.hackmdAPIEndpointURL + "/me")
+
 	if err != nil {
 		return nil, err
 	}
