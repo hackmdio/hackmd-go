@@ -61,14 +61,14 @@ type CreateNoteOptions struct {
 
 type Team struct {
 	ID          string             `json:"id"`
-	OwnerID     string             `json:"ownerId"`
+	OwnerID     *string            `json:"ownerId,omitempty"`
 	Name        string             `json:"name"`
 	Logo        string             `json:"logo"`
 	Path        string             `json:"path"`
 	Description string             `json:"description"`
 	HardBreaks  bool               `json:"hardBreaks"`
 	Visibility  TeamVisibilityType `json:"visibility"`
-	CreatedAt   time.Time          `json:"createdAt"`
+	CreatedAt   int64              `json:"createdAt"`
 }
 
 type User struct {
@@ -77,8 +77,7 @@ type User struct {
 	Name     string  `json:"name"`
 	UserPath string  `json:"userPath"`
 	Photo    string  `json:"photo"`
-	// TODO: fix this
-	// Teams    []Team  `json:"teams"`
+	Teams    []Team  `json:"teams"`
 }
 
 type SimpleUserProfile struct {
@@ -148,7 +147,7 @@ func (c *APIClient) GetMe() (*User, error) {
 	var user User
 
 	resp, err := c.client.
-		// DevMode().
+		DevMode().
 		R().SetSuccessResult(&user).Get(c.hackmdAPIEndpointURL + "/me")
 	if err != nil {
 		return nil, err
