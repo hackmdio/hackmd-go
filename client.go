@@ -51,24 +51,24 @@ const (
 )
 
 type CreateNoteOptions struct {
-	Title             *string                `json:"title,omitempty"`
-	Content           *string                `json:"content,omitempty"`
-	ReadPermission    *NotePermissionRole    `json:"readPermission,omitempty"`
-	WritePermission   *NotePermissionRole    `json:"writePermission,omitempty"`
-	CommentPermission *CommentPermissionType `json:"commentPermission,omitempty"`
-	Permalink         *string                `json:"permalink,omitempty"`
+	Title             string                `json:"title,omitempty"`
+	Content           string                `json:"content,omitempty"`
+	ReadPermission    NotePermissionRole    `json:"readPermission,omitempty"`
+	WritePermission   NotePermissionRole    `json:"writePermission,omitempty"`
+	CommentPermission CommentPermissionType `json:"commentPermission,omitempty"`
+	Permalink         string                `json:"permalink,omitempty"`
 }
 
-type NoteUpdateOptions struct {
-	Content         *string             `json:"content,omitempty"`
-	ReadPermission  *NotePermissionRole `json:"readPermission,omitempty"`
-	WritePermission *NotePermissionRole `json:"writePermission,omitempty"`
-	Permalink       *string             `json:"permalink,omitempty"`
+type UpdateNoteOptions struct {
+	Content         string             `json:"content,omitempty"`
+	ReadPermission  NotePermissionRole `json:"readPermission,omitempty"`
+	WritePermission NotePermissionRole `json:"writePermission,omitempty"`
+	Permalink       string             `json:"permalink,omitempty"`
 }
 
 type Team struct {
 	ID          string             `json:"id"`
-	OwnerID     *string            `json:"ownerId,omitempty"`
+	OwnerID     string             `json:"ownerId,omitempty"`
 	Name        string             `json:"name"`
 	Logo        string             `json:"logo"`
 	Path        string             `json:"path"`
@@ -79,35 +79,35 @@ type Team struct {
 }
 
 type User struct {
-	ID       string  `json:"id"`
-	Email    *string `json:"email,omitempty"`
-	Name     string  `json:"name"`
-	UserPath string  `json:"userPath"`
-	Photo    string  `json:"photo"`
-	Teams    []Team  `json:"teams"`
+	ID       string `json:"id"`
+	Email    string `json:"email,omitempty"`
+	Name     string `json:"name"`
+	UserPath string `json:"userPath"`
+	Photo    string `json:"photo"`
+	Teams    []Team `json:"teams"`
 }
 
 type SimpleUserProfile struct {
-	Name      string  `json:"name"`
-	UserPath  string  `json:"userPath"`
-	Photo     string  `json:"photo"`
-	Biography *string `json:"biography,omitempty"`
+	Name      string `json:"name"`
+	UserPath  string `json:"userPath"`
+	Photo     string `json:"photo"`
+	Biography string `json:"biography,omitempty"`
 }
 
 type Note struct {
-	ID             string             `json:"id"`
-	Title          string             `json:"title"`
-	Tags           *[]string          `json:"tags,omitempty"`
-	LastChangedAt  *int64             `json:"lastChangedAt,omitempty"`
-	CreatedAt      int64              `json:"createdAt"`
-	LastChangeUser *SimpleUserProfile `json:"lastChangeUser,omitempty"`
-	PublishType    NotePublishType    `json:"publishType"`
-	PublishedAt    *int64             `json:"publishedAt,omitempty"`
-	UserPath       *string            `json:"userPath,omitempty"`
-	TeamPath       *string            `json:"teamPath,omitempty"`
-	Permalink      *string            `json:"permalink,omitempty"`
-	ShortID        string             `json:"shortId"`
-	PublishLink    *string            `json:"publishLink,omitempty"`
+	ID             string            `json:"id"`
+	Title          string            `json:"title"`
+	Tags           []string          `json:"tags,omitempty"`
+	LastChangedAt  int64             `json:"lastChangedAt,omitempty"`
+	CreatedAt      int64             `json:"createdAt"`
+	LastChangeUser SimpleUserProfile `json:"lastChangeUser,omitempty"`
+	PublishType    NotePublishType   `json:"publishType"`
+	PublishedAt    int64             `json:"publishedAt,omitempty"`
+	UserPath       string            `json:"userPath,omitempty"`
+	TeamPath       string            `json:"teamPath,omitempty"`
+	Permalink      string            `json:"permalink,omitempty"`
+	ShortID        string            `json:"shortId"`
+	PublishLink    string            `json:"publishLink,omitempty"`
 
 	ReadPermission  NotePermissionRole `json:"readPermission"`
 	WritePermission NotePermissionRole `json:"writePermission"`
@@ -115,7 +115,7 @@ type Note struct {
 
 type SingleNote struct {
 	Note
-	Content string `json:"content"`
+	Content string `json:"content,omitempty"`
 }
 
 func NewAPIClient(accessToken string, options ...Option) *APIClient {
@@ -231,7 +231,7 @@ func (c *APIClient) CreateNote(options *CreateNoteOptions) (*SingleNote, error) 
 		return nil, err
 	}
 
-	if resp.Response.StatusCode != http.StatusOK {
+	if resp.Response.StatusCode != http.StatusCreated {
 		return nil, errors.New("Failed to create note")
 	}
 
@@ -256,7 +256,7 @@ func (c *APIClient) UpdateNoteContent(noteID string, content string) error {
 	return nil
 }
 
-func (c *APIClient) UpdateNote(noteID string, options *NoteUpdateOptions) error {
+func (c *APIClient) UpdateNote(noteID string, options *UpdateNoteOptions) error {
 	resp, err := c.client.
 		R().
 		SetBody(options).
@@ -282,7 +282,8 @@ func (c *APIClient) DeleteNote(noteID string) error {
 		return err
 	}
 
-	if resp.Response.StatusCode != http.StatusAccepted {
+	// 204 No Content
+	if resp.Response.StatusCode != http.StatusNoContent {
 		return errors.New("Failed to delete note")
 	}
 
@@ -336,14 +337,14 @@ func (c *APIClient) CreateTeamNote(teamPath string, options *CreateNoteOptions) 
 		return nil, err
 	}
 
-	if resp.Response.StatusCode != http.StatusOK {
+	if resp.Response.StatusCode != http.StatusCreated {
 		return nil, errors.New("Failed to create team note")
 	}
 
 	return &note, nil
 }
 
-func (c *APIClient) UpdateTeamNoteContent(teamPath, noteID, content string) error {
+func (c *APIClient) UpdateTeamNoteContent(teamPath string, noteID string, content string) error {
 	resp, err := c.client.
 		R().
 		SetBody(map[string]string{"content": content}).
@@ -360,7 +361,7 @@ func (c *APIClient) UpdateTeamNoteContent(teamPath, noteID, content string) erro
 	return nil
 }
 
-func (c *APIClient) UpdateTeamNote(teamPath, noteID string, options *NoteUpdateOptions) error {
+func (c *APIClient) UpdateTeamNote(teamPath string, noteID string, options *UpdateNoteOptions) error {
 	resp, err := c.client.
 		R().
 		SetBody(options).
@@ -377,7 +378,7 @@ func (c *APIClient) UpdateTeamNote(teamPath, noteID string, options *NoteUpdateO
 	return nil
 }
 
-func (c *APIClient) DeleteTeamNote(teamPath, noteID string) error {
+func (c *APIClient) DeleteTeamNote(teamPath string, noteID string) error {
 	resp, err := c.client.
 		R().
 		Delete(c.hackmdAPIEndpointURL + "/teams/" + teamPath + "/notes/" + noteID)
@@ -386,7 +387,7 @@ func (c *APIClient) DeleteTeamNote(teamPath, noteID string) error {
 		return err
 	}
 
-	if resp.Response.StatusCode != http.StatusAccepted {
+	if resp.Response.StatusCode != http.StatusNoContent {
 		return errors.New("Failed to delete team note")
 	}
 
