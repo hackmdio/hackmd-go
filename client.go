@@ -164,7 +164,6 @@ func (c *APIClient) GetHistory() (*[]Note, error) {
 	var notes []Note
 
 	resp, err := c.client.
-		DevMode().
 		R().SetSuccessResult(&notes).Get(c.hackmdAPIEndpointURL + "/history")
 
 	if err != nil {
@@ -178,22 +177,64 @@ func (c *APIClient) GetHistory() (*[]Note, error) {
 	return &notes, nil
 }
 
-// func (c *APIClient) GetNoteList() ([]Note, error) {
-// 	// Implement the GetNoteList method
-// }
-//
-// func (c *APIClient) GetNote(noteID string) (*SingleNote, error) {
-// 	// Implement the GetNote method
-// }
-//
-// func (c *APIClient) CreateNote(options *CreateNoteOptions) (*SingleNote, error) {
-// 	// Implement the CreateNote method
-// }
-//
+func (c *APIClient) GetNoteList() (*[]Note, error) {
+	var notes []Note
+
+	resp, err := c.client.
+		R().SetSuccessResult(&notes).Get(c.hackmdAPIEndpointURL + "/notes")
+		
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.Response.StatusCode != http.StatusOK {
+		return nil, errors.New("Failed to get /notes")
+	}
+
+	return &notes, nil
+}
+
+func (c *APIClient) GetNote(noteID string) (*SingleNote, error) {
+	var note SingleNote
+
+	resp, err := c.client.
+		R().SetSuccessResult(&note).Get(c.hackmdAPIEndpointURL + "/notes/" + noteID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.Response.StatusCode != http.StatusOK {
+		return nil, errors.New("Failed to get /notes/" + noteID)
+	}
+
+	return &note, nil
+}
+
+func (c *APIClient) CreateNote(options *CreateNoteOptions) (*SingleNote, error) {
+	var note SingleNote
+
+	resp, err := c.client.
+		R().
+		SetBody(options).
+		SetSuccessResult(&note).
+		Post(c.hackmdAPIEndpointURL + "/notes")
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.Response.StatusCode != http.StatusOK {
+		return nil, errors.New("Failed to create note")
+	}
+
+	return &note, nil
+}
+
 // func (c *APIClient) UpdateNoteContent(noteID string, content string) (*SingleNote, error) {
-// 	// Implement the UpdateNoteContent method
+// 	
 // }
-//
+
 // func (c *APIClient) UpdateNote(noteID string, options *NoteUpdateOptions) (*SingleNote, error) {
 // 	// Implement the UpdateNote method
 // }
