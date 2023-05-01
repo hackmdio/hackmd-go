@@ -59,6 +59,13 @@ type CreateNoteOptions struct {
 	Permalink         *string                `json:"permalink,omitempty"`
 }
 
+type NoteUpdateOptions struct {
+	Content         *string             `json:"content,omitempty"`
+	ReadPermission  *NotePermissionRole `json:"readPermission,omitempty"`
+	WritePermission *NotePermissionRole `json:"writePermission,omitempty"`
+	Permalink       *string             `json:"permalink,omitempty"`
+}
+
 type Team struct {
 	ID          string             `json:"id"`
 	OwnerID     *string            `json:"ownerId,omitempty"`
@@ -182,7 +189,7 @@ func (c *APIClient) GetNoteList() (*[]Note, error) {
 
 	resp, err := c.client.
 		R().SetSuccessResult(&notes).Get(c.hackmdAPIEndpointURL + "/notes")
-		
+
 	if err != nil {
 		return nil, err
 	}
@@ -231,38 +238,157 @@ func (c *APIClient) CreateNote(options *CreateNoteOptions) (*SingleNote, error) 
 	return &note, nil
 }
 
-// func (c *APIClient) UpdateNoteContent(noteID string, content string) (*SingleNote, error) {
-// 	
-// }
+// Update note api return 202 Accepted with empty body
+func (c *APIClient) UpdateNoteContent(noteID string, content string) error {
+	resp, err := c.client.
+		R().
+		SetBody(map[string]string{"content": content}).
+		Put(c.hackmdAPIEndpointURL + "/notes/" + noteID)
 
-// func (c *APIClient) UpdateNote(noteID string, options *NoteUpdateOptions) (*SingleNote, error) {
-// 	// Implement the UpdateNote method
-// }
-//
-// func (c *APIClient) DeleteNote(noteID string) error {
-// 	// Implement the DeleteNote method
-// }
-//
-// func (c *APIClient) GetTeams() ([]Team, error) {
-// 	// Implement the GetTeams method
-// }
-//
-// func (c *APIClient) GetTeamNotes(teamPath string) ([]Note, error) {
-// 	// Implement the GetTeamNotes method
-// }
-//
-// func (c *APIClient) CreateTeamNote(teamPath string, options *CreateNoteOptions) (*SingleNote, error) {
-// 	// Implement the CreateTeamNote method
-// }
-//
-// func (c *APIClient) UpdateTeamNoteContent(teamPath, noteID, content string) (*SingleNote, error) {
-// 	// Implement the UpdateTeamNoteContent method
-// }
-//
-// func (c *APIClient) UpdateTeamNote(teamPath, noteID string, options *NoteUpdateOptions) (*SingleNote, error) {
-// 	// Implement the UpdateTeamNote method
-// }
-//
-// func (c *APIClient) DeleteTeamNote(teamPath, noteID string) error {
-// 	// Implement the DeleteTeamNote method
-// }
+	if err != nil {
+		return err
+	}
+
+	if resp.Response.StatusCode != http.StatusAccepted {
+		return errors.New("Failed to update note content")
+	}
+
+	return nil
+}
+
+func (c *APIClient) UpdateNote(noteID string, options *NoteUpdateOptions) error {
+	resp, err := c.client.
+		R().
+		SetBody(options).
+		Patch(c.hackmdAPIEndpointURL + "/notes/" + noteID)
+
+	if err != nil {
+		return err
+	}
+
+	if resp.Response.StatusCode != http.StatusAccepted {
+		return errors.New("Failed to update note")
+	}
+
+	return nil
+}
+
+func (c *APIClient) DeleteNote(noteID string) error {
+	resp, err := c.client.
+		R().
+		Delete(c.hackmdAPIEndpointURL + "/notes/" + noteID)
+
+	if err != nil {
+		return err
+	}
+
+	if resp.Response.StatusCode != http.StatusAccepted {
+		return errors.New("Failed to delete note")
+	}
+
+	return nil
+}
+
+func (c *APIClient) GetTeams() ([]Team, error) {
+	var teams []Team
+
+	resp, err := c.client.
+		R().SetSuccessResult(&teams).Get(c.hackmdAPIEndpointURL + "/teams")
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.Response.StatusCode != http.StatusOK {
+		return nil, errors.New("Failed to get /teams")
+	}
+
+	return teams, nil
+}
+
+func (c *APIClient) GetTeamNotes(teamPath string) ([]Note, error) {
+	var notes []Note
+
+	resp, err := c.client.
+		R().SetSuccessResult(&notes).Get(c.hackmdAPIEndpointURL + "/teams/" + teamPath + "/notes")
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.Response.StatusCode != http.StatusOK {
+		return nil, errors.New("Failed to get /teams/" + teamPath + "/notes")
+	}
+
+	return notes, nil
+}
+
+func (c *APIClient) CreateTeamNote(teamPath string, options *CreateNoteOptions) (*SingleNote, error) {
+	var note SingleNote
+
+	resp, err := c.client.
+		R().
+		SetBody(options).
+		SetSuccessResult(&note).
+		Post(c.hackmdAPIEndpointURL + "/teams/" + teamPath + "/notes")
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.Response.StatusCode != http.StatusOK {
+		return nil, errors.New("Failed to create team note")
+	}
+
+	return &note, nil
+}
+
+func (c *APIClient) UpdateTeamNoteContent(teamPath, noteID, content string) error {
+	resp, err := c.client.
+		R().
+		SetBody(map[string]string{"content": content}).
+		Put(c.hackmdAPIEndpointURL + "/teams/" + teamPath + "/notes/" + noteID)
+
+	if err != nil {
+		return err
+	}
+
+	if resp.Response.StatusCode != http.StatusAccepted {
+		return errors.New("Failed to update team note content")
+	}
+
+	return nil
+}
+
+func (c *APIClient) UpdateTeamNote(teamPath, noteID string, options *NoteUpdateOptions) error {
+	resp, err := c.client.
+		R().
+		SetBody(options).
+		Patch(c.hackmdAPIEndpointURL + "/teams/" + teamPath + "/notes/" + noteID)
+
+	if err != nil {
+		return err
+	}
+
+	if resp.Response.StatusCode != http.StatusAccepted {
+		return errors.New("Failed to update team note")
+	}
+
+	return nil
+}
+
+func (c *APIClient) DeleteTeamNote(teamPath, noteID string) error {
+	resp, err := c.client.
+		R().
+		Delete(c.hackmdAPIEndpointURL + "/teams/" + teamPath + "/notes/" + noteID)
+
+	if err != nil {
+		return err
+	}
+
+	if resp.Response.StatusCode != http.StatusAccepted {
+		return errors.New("Failed to delete team note")
+	}
+
+	return nil
+}
