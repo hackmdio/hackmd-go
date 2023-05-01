@@ -7,14 +7,14 @@ import (
 	"github.com/spf13/viper"
 )
 
-func GetConfigFilePath() string {
+func GetConfigFileDir() string {
   var homeDir, err = os.UserHomeDir()
 
   if err != nil {
     panic(fmt.Errorf("Fatal error getting home directory: %s\n", err))
   }
 
-  return fmt.Sprintf("%s/.config/hackmd/config.json", homeDir)
+  return fmt.Sprintf("%s/.hackmd", homeDir)
 }
 
 func LoadConfig() {
@@ -25,18 +25,12 @@ func LoadConfig() {
 	viper.BindEnv("hackmdAPIEndpointURL", "HMD_API_ENDPOINT_URL")
 	viper.BindEnv("accessToken", "HMD_API_ACCESS_TOKEN")
 
-	configFilePath := GetConfigFilePath()
+	configFilePath := GetConfigFileDir()
+	viper.AddConfigPath(configFilePath)
 
-	if _, err := os.Stat(configFilePath); err == nil {
-		println("Using config file: " + configFilePath)
-		viper.SetConfigFile(configFilePath)
-
-		err := viper.ReadInConfig()
-		if err != nil {
-			panic(fmt.Errorf("Fatal error reading config file: %s\n", err))
-		}
-	} else {
-		viper.AutomaticEnv()
+	err := viper.ReadInConfig()
+	if err != nil {
+		println("Error reading config file: %s\n", err.Error())
 	}
 }
 
