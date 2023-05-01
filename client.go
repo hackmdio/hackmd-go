@@ -85,23 +85,22 @@ type SimpleUserProfile struct {
 	UserPath  string  `json:"userPath"`
 	Photo     string  `json:"photo"`
 	Biography *string `json:"biography,omitempty"`
-	CreatedAt int64   `json:"createdAt"`
 }
 
 type Note struct {
 	ID             string             `json:"id"`
 	Title          string             `json:"title"`
-	Tags           []string           `json:"tags"`
-	LastChangedAt  string             `json:"lastChangedAt"`
-	CreatedAt      string             `json:"createdAt"`
+	Tags           *[]string          `json:"tags,omitempty"`
+	LastChangedAt  *int64             `json:"lastChangedAt,omitempty"`
+	CreatedAt      int64              `json:"createdAt"`
 	LastChangeUser *SimpleUserProfile `json:"lastChangeUser,omitempty"`
 	PublishType    NotePublishType    `json:"publishType"`
-	PublishedAt    *string            `json:"publishedAt,omitempty"`
+	PublishedAt    *int64             `json:"publishedAt,omitempty"`
 	UserPath       *string            `json:"userPath,omitempty"`
 	TeamPath       *string            `json:"teamPath,omitempty"`
 	Permalink      *string            `json:"permalink,omitempty"`
 	ShortID        string             `json:"shortId"`
-	PublishLink    string             `json:"publishLink"`
+	PublishLink    *string            `json:"publishLink,omitempty"`
 
 	ReadPermission  NotePermissionRole `json:"readPermission"`
 	WritePermission NotePermissionRole `json:"writePermission"`
@@ -143,11 +142,11 @@ func WithAPIEndpointURL(url string) Option {
 	}
 }
 
+// get /me
 func (c *APIClient) GetMe() (*User, error) {
 	var user User
 
 	resp, err := c.client.
-		DevMode().
 		R().SetSuccessResult(&user).Get(c.hackmdAPIEndpointURL + "/me")
 
 	if err != nil {
@@ -155,16 +154,30 @@ func (c *APIClient) GetMe() (*User, error) {
 	}
 
 	if resp.Response.StatusCode != http.StatusOK {
-		return nil, errors.New("failed to get user information")
+		return nil, errors.New("failed to get /me")
 	}
 
 	return &user, nil
 }
 
-// func (c *APIClient) GetHistory() ([]Note, error) {
-// 	// Implement the GetHistory method
-// }
-//
+func (c *APIClient) GetHistory() (*[]Note, error) {
+	var notes []Note
+
+	resp, err := c.client.
+		DevMode().
+		R().SetSuccessResult(&notes).Get(c.hackmdAPIEndpointURL + "/history")
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.Response.StatusCode != http.StatusOK {
+		return nil, errors.New("Failed to get /history")
+	}
+
+	return &notes, nil
+}
+
 // func (c *APIClient) GetNoteList() ([]Note, error) {
 // 	// Implement the GetNoteList method
 // }
