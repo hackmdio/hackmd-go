@@ -3,6 +3,7 @@ package internal;
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/viper"
 )
@@ -14,7 +15,7 @@ func GetConfigFileDir() string {
     panic(fmt.Errorf("Fatal error getting home directory: %s\n", err))
   }
 
-  return fmt.Sprintf("%s/.hackmd", homeDir)
+	return filepath.Join(homeDir, ".hackmd")
 }
 
 func LoadConfig() {
