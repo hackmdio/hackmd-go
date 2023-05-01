@@ -4,12 +4,11 @@ go 1.20
 
 replace github.com/hackmdio/hackmd-go => ../..
 
-require github.com/hackmdio/hackmd-go v0.0.0-00010101000000-000000000000
-
 require (
 	github.com/go-task/slim-sprig v0.0.0-20230315185526-52ccab3ef572 // indirect
 	github.com/golang/mock v1.6.0 // indirect
 	github.com/google/pprof v0.0.0-20230429030804-905365eefe3e // indirect
+	github.com/hackmdio/hackmd-go v0.0.0-20230501103623-0a653bae6724 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/imroc/req/v3 v3.34.0 // indirect
