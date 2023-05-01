@@ -8,8 +8,8 @@ import (
 func GetHackMDClient() *HackMDClient.APIClient {
   LoadConfig()
 
-  var accessToken string = viper.GetString("accessToken")
-  var apiEndpoint string = viper.GetString("hackmdAPIEndpointURL")
+  accessToken := viper.GetString("accessToken")
+  apiEndpoint := viper.GetString("hackmdAPIEndpointURL")
 
   return HackMDClient.NewAPIClient(accessToken, HackMDClient.WithAPIEndpointURL(apiEndpoint))
 }
