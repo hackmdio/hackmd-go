@@ -2,9 +2,9 @@ module sample-usage
 
 go 1.20
 
-replace github.com/hackmdio/go-client => ../..
+replace github.com/hackmdio/go-api-client => ../..
 
-require github.com/hackmdio/go-client v0.0.0-00010101000000-000000000000
+require github.com/hackmdio/go-api-client v0.0.0-00010101000000-000000000000
 
 require (
 	github.com/go-task/slim-sprig v0.0.0-20230315185526-52ccab3ef572 // indirect

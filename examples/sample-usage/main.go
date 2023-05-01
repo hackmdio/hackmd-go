@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 	"fmt"
-	HackMDClient "github.com/hackmdio/go-client"
+	HackMDClient "github.com/hackmdio/go-api-client/pkg/api"
 )
 
 func main() {
