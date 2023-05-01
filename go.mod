@@ -1,4 +1,4 @@
-module github.com/hackmdio/go-client
+module github.com/hackmdio/hackmd-go
 
 go 1.20
 
