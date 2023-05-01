@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	 "github.com/charmbracelet/lipgloss"
 	"github.com/hackmdio/hackmd-go/hackmd-cli/internal"
 )
 
@@ -30,7 +31,10 @@ to quickly create a Cobra application.`,
 			return
 		}
 
-		fmt.Println(user.ID)
+		style := lipgloss.NewStyle().
+			Foreground(lipgloss.Color("2"))
+
+		fmt.Printf("Logged in as: %s\nusername: %s\n", style.Render(user.Email), style.Render(user.UserPath))
 	},
 }
 
