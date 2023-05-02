@@ -47,6 +47,10 @@ func WithAPIEndpointURL(url string) Option {
 	}
 }
 
+func (c *APIClient) GetHackmdAPIEndpointURL() string {
+	return c.hackmdAPIEndpointURL
+}
+
 func (c *APIClient) GetMe() (*User, error) {
 	var user User
 

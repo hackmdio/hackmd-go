@@ -35,6 +35,7 @@ to quickly create a Cobra application.`,
 			Foreground(lipgloss.Color("2"))
 
 		fmt.Printf("Logged in as: %s\nusername: %s\n", style.Render(user.Email), style.Render(user.UserPath))
+		fmt.Printf("Using API Endpoint: %s\n", style.Render(api.GetHackmdAPIEndpointURL()))
 	},
 }
 
