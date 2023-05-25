@@ -62,10 +62,72 @@ var notesCreateCmd = &cobra.Command{
 	},
 }
 
+var notesUpdateCmd = &cobra.Command{
+	Use:   "update",
+	Short: "Update a note",
+	Long: `Update a note. The note will be updated with the title provided. If no title is provided, a random title will be generated.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		api := internal.GetHackMDClient()
+
+		noteId, _ := cmd.Flags().GetString("noteId")
+		content, _ := cmd.Flags().GetString("content")
+
+		if noteId == "" {
+			fmt.Println("Please provide a note ID")
+			return
+		}
+
+		// TODO: add permission fields and validation
+
+		err := api.UpdateNote(noteId, &HackMDClient.UpdateNoteOptions{
+			Content: content,
+		})
+
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		fmt.Println("Note updated")
+	},
+}
+
+var notesDeleteCmd = &cobra.Command{
+	Use:   "delete",
+	Short: "Delete a note",
+	Long: `Delete a note.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		api := internal.GetHackMDClient()
+
+		noteId, _ := cmd.Flags().GetString("noteId")
+
+		if noteId == "" {
+			fmt.Println("Please provide a note ID")
+			return
+		}
+
+		err := api.DeleteNote(noteId)
+
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		fmt.Println("Note deleted")
+	},
+}
+
 func init() {
 	rootCmd.AddCommand(notesCmd)
 
 	notesCmd.AddCommand(notesCreateCmd)
-	notesCreateCmd.PersistentFlags().String("title", "", "The title of the note to create")
-	notesCreateCmd.PersistentFlags().String("content", "", "The content of the note to create")
+	notesCreateCmd.Flags().String("title", "", "The title of the note to create")
+	notesCreateCmd.Flags().String("content", "", "The content of the note to create")
+
+	notesCmd.AddCommand(notesUpdateCmd)
+	notesUpdateCmd.Flags().String("noteId", "", "The ID of the note to update")
+	notesUpdateCmd.Flags().String("content", "", "The content of the note to update")
+
+	notesCmd.AddCommand(notesDeleteCmd)
+	notesDeleteCmd.Flags().String("noteId", "", "The ID of the note to delete")
 }
