@@ -9,6 +9,9 @@ import (
 	"github.com/hackmdio/hackmd-go/hackmd-cli/internal"
 	HackMDClient "github.com/hackmdio/hackmd-go/pkg/api"
 	"github.com/spf13/cobra"
+	"os"
+
+	"github.com/jedib0t/go-pretty/v6/table"
 )
 
 // notesCmd represents the notes command
@@ -30,9 +33,13 @@ to quickly create a Cobra application.`,
 			return
 		}
 
+		t := table.NewWriter()
+		t.SetOutputMirror(os.Stdout)
+		t.AppendHeader(table.Row{"ID", "Title"})
 		for _, note := range *notes {
-			fmt.Println(note.ID, note.Title)
+			t.AppendRow(table.Row{note.ID, note.Title})
 		}
+		t.Render()
 	},
 }
 

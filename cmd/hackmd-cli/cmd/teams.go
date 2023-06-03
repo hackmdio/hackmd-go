@@ -1,28 +1,20 @@
-/*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/hackmdio/hackmd-go/hackmd-cli/internal"
+	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 )
 
 // teamsCmd represents the teams command
 var teamsCmd = &cobra.Command{
 	Use:   "teams",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "List all teams",
+	Long: `List all teams in your HackMD account.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		
 		api := internal.GetHackMDClient()
 
 		teams, err := api.GetTeams()
@@ -31,9 +23,15 @@ to quickly create a Cobra application.`,
 			return
 		}
 
+		t := table.NewWriter()
+		t.SetOutputMirror(os.Stdout)
+		t.AppendHeader(table.Row{"Path", "Name"})
+
 		for _, team := range teams {
-			fmt.Println(team.Path, team.Name)
+			t.AppendRow(table.Row{team.Path, team.Name})
 		}
+
+		t.Render()
 	},
 }
 
