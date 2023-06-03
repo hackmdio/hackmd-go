@@ -11,9 +11,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// notesCmd represents the notes command
-var notesCmd = &cobra.Command{
-	Use:   "notes",
+// teamNotesCmd represents the teamNotes command
+var teamNotesCmd = &cobra.Command{
+	Use:   "teamNotes",
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
@@ -22,21 +22,27 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		teamPath, _ := cmd.Flags().GetString("teamPath")
 		api := internal.GetHackMDClient()
 
-		notes, err := api.GetNoteList()
+		if teamPath == "" {
+			fmt.Println("Please provide a team path")
+			return
+		}
+
+		notes, err := api.GetTeamNotes(teamPath)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 
-		for _, note := range *notes {
+		for _, note := range notes {
 			fmt.Println(note.ID, note.Title)
 		}
 	},
 }
 
-var notesCreateCmd = &cobra.Command{
+var teamNotesCreateCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Create a new note",
 	Long:  `Create a new note. The note will be created with the title provided. If no title is provided, a random title will be generated.`,
@@ -45,10 +51,15 @@ var notesCreateCmd = &cobra.Command{
 
 		title, _ := cmd.Flags().GetString("title")
 		content, _ := cmd.Flags().GetString("content")
+		teamPath, _ := cmd.Flags().GetString("teamPath")
+
+		if teamPath == "" {
+			fmt.Println("Please provide a team path")
+			return
+		}
 
 		// TODO: add permission fields and validation
-
-		note, err := api.CreateNote(&HackMDClient.CreateNoteOptions{
+		note, err := api.CreateTeamNote(teamPath, &HackMDClient.CreateNoteOptions{
 			Title:   title,
 			Content: content,
 		})
@@ -61,24 +72,29 @@ var notesCreateCmd = &cobra.Command{
 	},
 }
 
-var notesUpdateCmd = &cobra.Command{
+var teamNotesUpdateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "Update a note",
 	Long:  `Update a note. The note will be updated with the title provided. If no title is provided, a random title will be generated.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		api := internal.GetHackMDClient()
 
-		noteId, _ := cmd.Flags().GetString("noteId")
 		content, _ := cmd.Flags().GetString("content")
+		noteID, _ := cmd.Flags().GetString("noteID")
+		teamPath, _ := cmd.Flags().GetString("teamPath")
 
-		if noteId == "" {
+		if noteID == "" {
 			fmt.Println("Please provide a note ID")
 			return
 		}
 
-		// TODO: add permission fields and validation
+		if teamPath == "" {
+			fmt.Println("Please provide a team path")
+			return
+		}
 
-		err := api.UpdateNote(noteId, &HackMDClient.UpdateNoteOptions{
+		// TODO: add permission fields and validation
+		err := api.UpdateTeamNote(teamPath, noteID, &HackMDClient.UpdateNoteOptions{
 			Content: content,
 		})
 		if err != nil {
@@ -90,21 +106,27 @@ var notesUpdateCmd = &cobra.Command{
 	},
 }
 
-var notesDeleteCmd = &cobra.Command{
+var teamNotesDeleteCmd = &cobra.Command{
 	Use:   "delete",
 	Short: "Delete a note",
 	Long:  `Delete a note.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		api := internal.GetHackMDClient()
 
-		noteId, _ := cmd.Flags().GetString("noteId")
+		noteID, _ := cmd.Flags().GetString("noteID")
+		teamPath, _ := cmd.Flags().GetString("teamPath")
 
-		if noteId == "" {
+		if noteID == "" {
 			fmt.Println("Please provide a note ID")
 			return
 		}
 
-		err := api.DeleteNote(noteId)
+		if teamPath == "" {
+			fmt.Println("Please provide a team path")
+			return
+		}
+
+		err := api.DeleteTeamNote(teamPath, noteID)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -115,16 +137,18 @@ var notesDeleteCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(notesCmd)
+	rootCmd.AddCommand(teamNotesCmd)
 
-	notesCmd.AddCommand(notesCreateCmd)
-	notesCreateCmd.Flags().String("title", "", "The title of the note to create")
-	notesCreateCmd.Flags().String("content", "", "The content of the note to create")
+	teamNotesCmd.PersistentFlags().String("teamPath", "", "Team path")
 
-	notesCmd.AddCommand(notesUpdateCmd)
-	notesUpdateCmd.Flags().String("noteId", "", "The ID of the note to update")
-	notesUpdateCmd.Flags().String("content", "", "The content of the note to update")
+	teamNotesCmd.AddCommand(teamNotesCreateCmd)
+	teamNotesCreateCmd.Flags().String("title", "", "Title of the note")
+	teamNotesCreateCmd.Flags().String("content", "", "Content of the note")
 
-	notesCmd.AddCommand(notesDeleteCmd)
-	notesDeleteCmd.Flags().String("noteId", "", "The ID of the note to delete")
+	teamNotesCmd.AddCommand(teamNotesUpdateCmd)
+	teamNotesUpdateCmd.Flags().String("noteID", "", "ID of the note")
+	teamNotesUpdateCmd.Flags().String("content", "", "Content of the note")
+
+	teamNotesCmd.AddCommand(teamNotesDeleteCmd)
+	teamNotesDeleteCmd.Flags().String("noteID", "", "ID of the note")
 }
