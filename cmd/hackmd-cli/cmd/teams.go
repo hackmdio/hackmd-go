@@ -32,7 +32,7 @@ to quickly create a Cobra application.`,
 		}
 
 		for _, team := range teams {
-			fmt.Println(team.ID, team.Name, team.Path)
+			fmt.Println(team.Path, team.Name)
 		}
 	},
 }
