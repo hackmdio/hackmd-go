@@ -116,7 +116,7 @@ var notesDeleteCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(notesCmd)
 
-	notesCmd.PersistentFlags().String("output", "table", "The output format to use. Valid options are table, json, yaml, csv")
+	notesCmd.Flags().String("output", "table", "The output format to use. Valid options are table, json, yaml, csv")
 
 	notesCmd.AddCommand(notesCreateCmd)
 	notesCreateCmd.Flags().String("title", "", "The title of the note to create")

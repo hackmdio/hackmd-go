@@ -208,7 +208,7 @@ func (c *APIClient) GetTeams() ([]Team, error) {
 	return teams, nil
 }
 
-func (c *APIClient) GetTeamNotes(teamPath string) ([]Note, error) {
+func (c *APIClient) GetTeamNotes(teamPath string) (*[]Note, error) {
 	var notes []Note
 
 	resp, err := c.client.
@@ -222,7 +222,7 @@ func (c *APIClient) GetTeamNotes(teamPath string) ([]Note, error) {
 		return nil, errors.New("Failed to get /teams/" + teamPath + "/notes")
 	}
 
-	return notes, nil
+	return &notes, nil
 }
 
 func (c *APIClient) CreateTeamNote(teamPath string, options *CreateNoteOptions) (*SingleNote, error) {

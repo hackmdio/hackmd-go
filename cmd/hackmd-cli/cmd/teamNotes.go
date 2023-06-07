@@ -36,9 +36,8 @@ to quickly create a Cobra application.`,
 			return
 		}
 
-		for _, note := range notes {
-			fmt.Println(note.ID, note.Title)
-		}
+		output := cmd.Flag("output").Value.String()
+		internal.PrintNotes(output, notes)
 	},
 }
 
@@ -138,6 +137,7 @@ var teamNotesDeleteCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(teamNotesCmd)
+	teamNotesCmd.Flags().String("output", "table", "The output format to use. Valid options are table, json, yaml, csv")
 
 	teamNotesCmd.PersistentFlags().String("teamPath", "", "Team path")
 
