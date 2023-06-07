@@ -1,3 +1,5 @@
+// build with GPT-4
+// https://chat.openai.com/share/efb0f512-b21a-43f4-90be-906372bef924
 package internal
 
 import (
