@@ -9,9 +9,6 @@ import (
 	"github.com/hackmdio/hackmd-go/hackmd-cli/internal"
 	HackMDClient "github.com/hackmdio/hackmd-go/pkg/api"
 	"github.com/spf13/cobra"
-	"os"
-
-	"github.com/jedib0t/go-pretty/v6/table"
 )
 
 // notesCmd represents the notes command
@@ -33,13 +30,8 @@ to quickly create a Cobra application.`,
 			return
 		}
 
-		t := table.NewWriter()
-		t.SetOutputMirror(os.Stdout)
-		t.AppendHeader(table.Row{"ID", "Title"})
-		for _, note := range *notes {
-			t.AppendRow(table.Row{note.ID, note.Title})
-		}
-		t.Render()
+		output := cmd.Flag("output").Value.String()
+		internal.PrintNotes(output, notes)
 	},
 }
 
@@ -123,6 +115,8 @@ var notesDeleteCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(notesCmd)
+
+	notesCmd.PersistentFlags().String("output", "table", "The output format to use. Valid options are table, json, yaml, csv")
 
 	notesCmd.AddCommand(notesCreateCmd)
 	notesCreateCmd.Flags().String("title", "", "The title of the note to create")
