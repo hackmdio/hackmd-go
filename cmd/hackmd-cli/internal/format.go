@@ -14,7 +14,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-func printTable(data *[]interface{}, attributes []string) {
+func PrintTable(data *[]interface{}, attributes []string) {
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
 
@@ -55,11 +55,11 @@ func printNotesTable(notes *[]HackMDClient.Note) {
 	// Specify the attributes you want to print
 	attributes := []string{"ID", "Title"}
 
-	printTable(&data, attributes)
+	PrintTable(&data, attributes)
 }
 
 
-func printJSON(notes *[]HackMDClient.Note) {
+func PrintJSON(notes *[]HackMDClient.Note) {
 	jsonNotes, err := json.MarshalIndent(notes, "", "  ")
 	if err != nil {
 		fmt.Println("Failed to convert to JSON:", err)
@@ -68,7 +68,7 @@ func printJSON(notes *[]HackMDClient.Note) {
 	fmt.Println(string(jsonNotes))
 }
 
-func printYAML(notes *[]HackMDClient.Note) {
+func PrintYAML(notes *[]HackMDClient.Note) {
 	yamlNotes, err := yaml.Marshal(notes)
 	if err != nil {
 		fmt.Println("Failed to convert to YAML:", err)
@@ -77,7 +77,7 @@ func printYAML(notes *[]HackMDClient.Note) {
 	fmt.Println(string(yamlNotes))
 }
 
-func printCSV(data *[]interface{}, attributes []string) {
+func PrintCSV(data *[]interface{}, attributes []string) {
 	// create a new CSV writer
 	writer := csv.NewWriter(os.Stdout)
 
@@ -121,7 +121,7 @@ func printNotesCSV(notes *[]HackMDClient.Note) {
 		data[i] = v
 	}
 	attributes := []string{"ID", "Title"}
-	printCSV(&data, attributes)
+	PrintCSV(&data, attributes)
 }
 
 func PrintNotes(output string, notes *[]HackMDClient.Note) {
@@ -129,9 +129,9 @@ func PrintNotes(output string, notes *[]HackMDClient.Note) {
 	case "table":
 		printNotesTable(notes)
 	case "json":
-		printJSON(notes)
+		PrintJSON(notes)
 	case "yaml":
-		printYAML(notes)
+		PrintYAML(notes)
 	case "csv":
 		printNotesCSV(notes)
 	default:
