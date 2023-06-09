@@ -25,5 +25,5 @@ func GetMeFlow(showLoginMessage bool) {
 	// fmt.Printf("Logged in as: %s\nusername: %s\n", style.Render(user.Email), style.Render(user.UserPath))
 	fmt.Printf("Using API Endpoint: %s\n", style.Render(api.GetHackmdAPIEndpointURL()))
 
-	PrintTable(&[]interface{}{user}, []string{"Email", "UserPath"})
+	PrintTable(&[]interface{}{user}, []string{"Email", "Name", "UserPath"})
 }
