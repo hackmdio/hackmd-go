@@ -52,16 +52,21 @@ var teamNotesCreateCmd = &cobra.Command{
 		title, _ := cmd.Flags().GetString("title")
 		content, _ := cmd.Flags().GetString("content")
 		teamPath, _ := cmd.Flags().GetString("teamPath")
+		readPermission, _ := cmd.Flags().GetString("readPermission")
+		writePermission, _ := cmd.Flags().GetString("writePermission")
+		commentPermission, _ := cmd.Flags().GetString("commentPermission")
 
 		if teamPath == "" {
 			fmt.Println("Please provide a team path")
 			return
 		}
 
-		// TODO: add permission fields and validation
 		note, err := api.CreateTeamNote(teamPath, &HackMDClient.CreateNoteOptions{
-			Title:   title,
-			Content: content,
+			Title:             title,
+			Content:           content,
+			ReadPermission:    HackMDClient.StringToNotePermissionRole(readPermission),
+			WritePermission:   HackMDClient.StringToNotePermissionRole(writePermission),
+			CommentPermission: HackMDClient.StringToCommentPermissionType(commentPermission),
 		})
 		if err != nil {
 			fmt.Println(err)
@@ -142,10 +147,10 @@ func init() {
 	flags.AddCommandPersistentFlags(teamNotesCmd, []flags.FlagData{flags.TeamPathFlag})
 
 	teamNotesCmd.AddCommand(teamNotesCreateCmd)
-	flags.AddCommandFlags(teamNotesCreateCmd, []flags.FlagData{flags.TitleFlag, flags.ContentFlag})
+	flags.AddCommandFlags(teamNotesCreateCmd, []flags.FlagData{flags.TitleFlag, flags.ContentFlag, flags.ReadPermissionFlag, flags.WritePermissionFlag, flags.CommentPermissionFlag})
 
 	teamNotesCmd.AddCommand(teamNotesUpdateCmd)
-	flags.AddCommandFlags(teamNotesUpdateCmd, []flags.FlagData{flags.NoteIDFlag, flags.ContentFlag})
+	flags.AddCommandFlags(teamNotesUpdateCmd, []flags.FlagData{flags.NoteIDFlag, flags.ContentFlag, flags.ReadPermissionFlag, flags.WritePermissionFlag, flags.CommentPermissionFlag})
 
 	teamNotesCmd.AddCommand(teamNotesDeleteCmd)
 	flags.AddCommandFlags(teamNotesDeleteCmd, []flags.FlagData{flags.NoteIDFlag})

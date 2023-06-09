@@ -62,6 +62,9 @@ var notesCreateCmd = &cobra.Command{
 
 		title, _ := cmd.Flags().GetString("title")
 		content, _ := cmd.Flags().GetString("content")
+		readPermission, _ := cmd.Flags().GetString("readPermission")
+		writePermission, _ := cmd.Flags().GetString("writePermission")
+		commentPermission, _ := cmd.Flags().GetString("commentPermission")
 
 		stat, _ := os.Stdin.Stat()
 		if (stat.Mode() & os.ModeNamedPipe) != 0 {
@@ -71,11 +74,12 @@ var notesCreateCmd = &cobra.Command{
 			}
 		}
 
-		// TODO: add permission fields and validation
-
 		note, err := api.CreateNote(&HackMDClient.CreateNoteOptions{
-			Title:   title,
-			Content: content,
+			Title:             title,
+			Content:           content,
+			ReadPermission:    HackMDClient.StringToNotePermissionRole(readPermission),
+			WritePermission:   HackMDClient.StringToNotePermissionRole(writePermission),
+			CommentPermission: HackMDClient.StringToCommentPermissionType(commentPermission),
 		})
 		if err != nil {
 			fmt.Println(err)
@@ -145,10 +149,10 @@ func init() {
 	flags.AddCommandFlags(notesCmd, []flags.FlagData{flags.OutputFlag})
 
 	notesCmd.AddCommand(notesCreateCmd)
-	flags.AddCommandFlags(notesCreateCmd, []flags.FlagData{flags.TitleFlag, flags.ContentFlag})
+	flags.AddCommandFlags(notesCreateCmd, []flags.FlagData{flags.TitleFlag, flags.ContentFlag, flags.ReadPermissionFlag, flags.WritePermissionFlag, flags.CommentPermissionFlag})
 
 	notesCmd.AddCommand(notesUpdateCmd)
-	flags.AddCommandFlags(notesUpdateCmd, []flags.FlagData{flags.NoteIDFlag, flags.ContentFlag})
+	flags.AddCommandFlags(notesUpdateCmd, []flags.FlagData{flags.NoteIDFlag, flags.ContentFlag, flags.ReadPermissionFlag, flags.WritePermissionFlag, flags.CommentPermissionFlag})
 
 	notesCmd.AddCommand(notesDeleteCmd)
 	flags.AddCommandFlags(notesDeleteCmd, []flags.FlagData{flags.NoteIDFlag})

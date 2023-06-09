@@ -26,6 +26,23 @@ const (
 	Everyone      CommentPermissionType = "everyone"
 )
 
+func StringToCommentPermissionType(s string) CommentPermissionType {
+	switch s {
+	case "disabled":
+		return Disabled
+	case "forbidden":
+		return Forbidden
+	case "owners":
+		return Owners
+	case "signed_in_users":
+		return SignedInUsers
+	case "everyone":
+		return Everyone
+	default:
+		return Disabled
+	}
+}
+
 type NotePermissionRole string
 
 const (
@@ -33,6 +50,19 @@ const (
 	SignedIn NotePermissionRole = "signed_in"
 	Guest    NotePermissionRole = "guest"
 )
+
+func StringToNotePermissionRole(s string) NotePermissionRole {
+	switch s {
+	case "owner":
+		return Owner
+	case "signed_in":
+		return SignedIn
+	case "guest":
+		return Guest
+	default:
+		return Guest
+	}
+}
 
 type CreateNoteOptions struct {
 	Title             string                `json:"title,omitempty"`
