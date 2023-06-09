@@ -22,6 +22,8 @@ func GetMeFlow(showLoginMessage bool) {
 	style := lipgloss.NewStyle().
 		Foreground(lipgloss.Color("2"))
 
-	fmt.Printf("Logged in as: %s\nusername: %s\n", style.Render(user.Email), style.Render(user.UserPath))
+	// fmt.Printf("Logged in as: %s\nusername: %s\n", style.Render(user.Email), style.Render(user.UserPath))
 	fmt.Printf("Using API Endpoint: %s\n", style.Render(api.GetHackmdAPIEndpointURL()))
+
+	PrintTable(&[]interface{}{user}, []string{"Email", "UserPath"})
 }

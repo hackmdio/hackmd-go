@@ -29,6 +29,11 @@ func PrintTable(data *[]interface{}, attributes []string) {
 	for _, item := range *data {
 		itemValue := reflect.ValueOf(item)
 
+		// If it's a pointer, then we get the value it points to
+		if itemValue.Kind() == reflect.Ptr {
+			itemValue = itemValue.Elem()
+		}
+
 		// prepare a row for this item
 		row := make(table.Row, len(attributes))
 
