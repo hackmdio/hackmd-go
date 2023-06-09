@@ -8,6 +8,8 @@ import (
 	"fmt"
 
 	"github.com/hackmdio/hackmd-go/hackmd-cli/internal"
+		"github.com/hackmdio/hackmd-go/hackmd-cli/internal/flags"
+
 	"github.com/spf13/cobra"
 )
 
@@ -37,5 +39,5 @@ to quickly create a Cobra application.`,
 
 func init() {
 	rootCmd.AddCommand(historyCmd)
-	historyCmd.Flags().String("output", "table", "The output format to use. Valid options are table, json, yaml, csv")
+	flags.AddCommandFlags(historyCmd, []flags.FlagData{flags.OutputFlag})
 }

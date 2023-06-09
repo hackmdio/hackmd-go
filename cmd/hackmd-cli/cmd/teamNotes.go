@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hackmdio/hackmd-go/hackmd-cli/internal"
+	"github.com/hackmdio/hackmd-go/hackmd-cli/internal/flags"
 	HackMDClient "github.com/hackmdio/hackmd-go/pkg/api"
 	"github.com/spf13/cobra"
 )
@@ -137,18 +138,15 @@ var teamNotesDeleteCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(teamNotesCmd)
-	teamNotesCmd.Flags().String("output", "table", "The output format to use. Valid options are table, json, yaml, csv")
-
-	teamNotesCmd.PersistentFlags().String("teamPath", "", "Team path")
+	flags.AddCommandFlags(teamNotesCmd, []flags.FlagData{flags.OutputFlag})
+	flags.AddCommandPersistentFlags(teamNotesCmd, []flags.FlagData{flags.TeamPathFlag})
 
 	teamNotesCmd.AddCommand(teamNotesCreateCmd)
-	teamNotesCreateCmd.Flags().String("title", "", "Title of the note")
-	teamNotesCreateCmd.Flags().String("content", "", "Content of the note")
+	flags.AddCommandFlags(teamNotesCreateCmd, []flags.FlagData{flags.TitleFlag, flags.ContentFlag})
 
 	teamNotesCmd.AddCommand(teamNotesUpdateCmd)
-	teamNotesUpdateCmd.Flags().String("noteID", "", "ID of the note")
-	teamNotesUpdateCmd.Flags().String("content", "", "Content of the note")
+	flags.AddCommandFlags(teamNotesUpdateCmd, []flags.FlagData{flags.NoteIDFlag, flags.ContentFlag})
 
 	teamNotesCmd.AddCommand(teamNotesDeleteCmd)
-	teamNotesDeleteCmd.Flags().String("noteID", "", "ID of the note")
+	flags.AddCommandFlags(teamNotesDeleteCmd, []flags.FlagData{flags.NoteIDFlag})
 }
