@@ -191,7 +191,7 @@ func (c *APIClient) DeleteNote(noteID string) error {
 	return nil
 }
 
-func (c *APIClient) GetTeams() ([]Team, error) {
+func (c *APIClient) GetTeams() (*[]Team, error) {
 	var teams []Team
 
 	resp, err := c.client.
@@ -205,7 +205,7 @@ func (c *APIClient) GetTeams() ([]Team, error) {
 		return nil, errors.New("Failed to get /teams")
 	}
 
-	return teams, nil
+	return &teams, nil
 }
 
 func (c *APIClient) GetTeamNotes(teamPath string) (*[]Note, error) {

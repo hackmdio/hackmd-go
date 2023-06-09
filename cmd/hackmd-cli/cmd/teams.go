@@ -2,10 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/hackmdio/hackmd-go/hackmd-cli/internal"
-	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 )
 
@@ -16,6 +14,7 @@ var teamsCmd = &cobra.Command{
 	Long: `List all teams in your HackMD account.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		api := internal.GetHackMDClient()
+		output := cmd.Flag("output").Value.String()
 
 		teams, err := api.GetTeams()
 		if err != nil {
@@ -23,28 +22,11 @@ var teamsCmd = &cobra.Command{
 			return
 		}
 
-		t := table.NewWriter()
-		t.SetOutputMirror(os.Stdout)
-		t.AppendHeader(table.Row{"Path", "Name"})
-
-		for _, team := range teams {
-			t.AppendRow(table.Row{team.Path, team.Name})
-		}
-
-		t.Render()
+		internal.PrintTeams(output, teams)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(teamsCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// teamsCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// teamsCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	teamsCmd.Flags().String("output", "table", "The output format to use. Valid options are table, json, yaml, csv")
 }

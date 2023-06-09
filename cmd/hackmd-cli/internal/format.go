@@ -64,7 +64,7 @@ func printNotesTable(notes *[]HackMDClient.Note) {
 }
 
 
-func PrintJSON(notes *[]HackMDClient.Note) {
+func PrintNoteJSON(notes *[]HackMDClient.Note) {
 	jsonNotes, err := json.MarshalIndent(notes, "", "  ")
 	if err != nil {
 		fmt.Println("Failed to convert to JSON:", err)
@@ -73,7 +73,7 @@ func PrintJSON(notes *[]HackMDClient.Note) {
 	fmt.Println(string(jsonNotes))
 }
 
-func PrintYAML(notes *[]HackMDClient.Note) {
+func PrintNoteYAML(notes *[]HackMDClient.Note) {
 	yamlNotes, err := yaml.Marshal(notes)
 	if err != nil {
 		fmt.Println("Failed to convert to YAML:", err)
@@ -134,12 +134,64 @@ func PrintNotes(output string, notes *[]HackMDClient.Note) {
 	case "table":
 		printNotesTable(notes)
 	case "json":
-		PrintJSON(notes)
+		PrintNoteJSON(notes)
 	case "yaml":
-		PrintYAML(notes)
+		PrintNoteYAML(notes)
 	case "csv":
 		printNotesCSV(notes)
 	default:
 		fmt.Println("Invalid output format. Please choose from table, json, yaml, csv.")
 	}
 }
+
+func printTeamsTable(teams *[]HackMDClient.Team) {
+	data := make([]interface{}, len(*teams))
+	for i, v := range *teams {
+		data[i] = v
+	}
+	attributes := []string{"Path", "Name"}
+	PrintTable(&data, attributes)
+}
+
+func printTeamsCSV(teams *[]HackMDClient.Team) {
+	data := make([]interface{}, len(*teams))
+	for i, v := range *teams {
+		data[i] = v
+	}
+	attributes := []string{"Path", "Name"}
+	PrintCSV(&data, attributes)
+}
+
+func printTeamsJSON(teams *[]HackMDClient.Team) {
+	jsonTeams, err := json.MarshalIndent(teams, "", "  ")
+	if err != nil {
+		fmt.Println("Failed to convert to JSON:", err)
+		return
+	}
+	fmt.Println(string(jsonTeams))
+}
+
+func printTeamsYAML(teams *[]HackMDClient.Team) {
+	yamlTeams, err := yaml.Marshal(teams)
+	if err != nil {
+		fmt.Println("Failed to convert to YAML:", err)
+		return
+	}
+	fmt.Println(string(yamlTeams))
+}
+
+func PrintTeams(output string, teams *[]HackMDClient.Team) {
+	switch output {
+	case "table":
+		printTeamsTable(teams)
+	case "json":
+		printTeamsJSON(teams)
+	case "yaml":
+		printTeamsYAML(teams)
+	case "csv":
+		printTeamsCSV(teams)
+	default:
+		fmt.Println("Invalid output format. Please choose from table, json, yaml, csv.")
+	}
+}
+
