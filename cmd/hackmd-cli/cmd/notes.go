@@ -4,7 +4,10 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"bufio"
 	"fmt"
+	"io"
+	"os"
 
 	"github.com/hackmdio/hackmd-go/hackmd-cli/internal"
 	HackMDClient "github.com/hackmdio/hackmd-go/pkg/api"
@@ -35,6 +38,20 @@ to quickly create a Cobra application.`,
 	},
 }
 
+func processInput(r io.Reader) string {
+	scanner := bufio.NewScanner(r)
+	var pipeText string
+	for scanner.Scan() {
+		pipeText += scanner.Text()
+	}
+
+	if err := scanner.Err(); err != nil {
+		fmt.Fprintln(os.Stderr, "reading standard input:", err)
+	}
+
+	return pipeText
+}
+
 var notesCreateCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Create a new note",
@@ -44,6 +61,14 @@ var notesCreateCmd = &cobra.Command{
 
 		title, _ := cmd.Flags().GetString("title")
 		content, _ := cmd.Flags().GetString("content")
+
+		stat, _ := os.Stdin.Stat()
+		if (stat.Mode() & os.ModeNamedPipe) != 0 {
+			// if no content
+			if content == "" {
+				content = processInput(os.Stdin)
+			}
+		}
 
 		// TODO: add permission fields and validation
 
