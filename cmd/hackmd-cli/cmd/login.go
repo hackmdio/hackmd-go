@@ -4,7 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"github.com/hackmdio/hackmd-go/hackmd-cli/internal"
+	"github.com/hackmdio/hackmd-go/cmd/hackmd-cli/internal"
 	"github.com/spf13/cobra"
 )
 

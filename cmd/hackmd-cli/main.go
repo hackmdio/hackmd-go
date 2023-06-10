@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/hackmdio/hackmd-go/hackmd-cli/cmd"
+	"github.com/hackmdio/hackmd-go/cmd/hackmd-cli/cmd"
 )
 
 func main() {

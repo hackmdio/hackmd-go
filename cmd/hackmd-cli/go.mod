@@ -1,4 +1,4 @@
-module github.com/hackmdio/hackmd-go/hackmd-cli
+module github.com/hackmdio/hackmd-go/cmd/hackmd-cli
 
 go 1.20
 

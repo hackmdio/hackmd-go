@@ -3,8 +3,8 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/hackmdio/hackmd-go/hackmd-cli/internal"
-	"github.com/hackmdio/hackmd-go/hackmd-cli/internal/flags"
+	"github.com/hackmdio/hackmd-go/cmd/hackmd-cli/internal"
+	"github.com/hackmdio/hackmd-go/cmd/hackmd-cli/internal/flags"
 	"github.com/spf13/cobra"
 )
 

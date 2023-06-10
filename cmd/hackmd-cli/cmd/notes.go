@@ -9,8 +9,8 @@ import (
 	"io"
 	"os"
 
-	"github.com/hackmdio/hackmd-go/hackmd-cli/internal"
-	"github.com/hackmdio/hackmd-go/hackmd-cli/internal/flags"
+	"github.com/hackmdio/hackmd-go/cmd/hackmd-cli/internal"
+	"github.com/hackmdio/hackmd-go/cmd/hackmd-cli/internal/flags"
 	HackMDClient "github.com/hackmdio/hackmd-go/pkg/api"
 	"github.com/spf13/cobra"
 )
