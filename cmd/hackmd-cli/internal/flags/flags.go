@@ -54,7 +54,7 @@ var ContentFlag = FlagData{
 
 // NoteIDFlag is for note id.
 var NoteIDFlag = FlagData{
-	Name:         "noteID",
+	Name:         "noteId",
 	DefaultValue: "",
 	Description:  "ID of the note",
 }

@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hackmdio/hackmd-go/hackmd-cli/internal"
+	"github.com/hackmdio/hackmd-go/hackmd-cli/internal/flags"
 	"github.com/spf13/cobra"
 )
 
@@ -23,7 +24,7 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		api := internal.GetHackMDClient()
 
-		noteId, _ := cmd.Flags().GetString("noteId")
+		noteId, _ := cmd.Flags().GetString(flags.NoteIDFlag.Name)
 
 		if noteId == "" {
 			fmt.Println("Please provide a note ID")
@@ -43,5 +44,5 @@ to quickly create a Cobra application.`,
 func init() {
 	rootCmd.AddCommand(exportCmd)
 
-	exportCmd.PersistentFlags().String("noteId", "", "The ID of the note to export")
+	flags.AddCommandFlags(exportCmd, []flags.FlagData{flags.NoteIDFlag})
 }
