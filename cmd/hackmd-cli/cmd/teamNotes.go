@@ -15,13 +15,8 @@ import (
 // teamNotesCmd represents the teamNotes command
 var teamNotesCmd = &cobra.Command{
 	Use:   "teamNotes",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "List all notes of a specific team",
+	Long:  `The 'teamNotes' command retrieves and lists all the notes associated with a specified team in the user's HackMD account. The user needs to provide the team path for the team whose notes need to be fetched. If a team path isn't provided, the command will return an error.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		teamPath, _ := cmd.Flags().GetString("teamPath")
 		api := internal.GetHackMDClient()
@@ -44,8 +39,8 @@ to quickly create a Cobra application.`,
 
 var teamNotesCreateCmd = &cobra.Command{
 	Use:   "create",
-	Short: "Create a new note",
-	Long:  `Create a new note. The note will be created with the title provided. If no title is provided, a random title will be generated.`,
+	Short: "Create a new note for a team",
+	Long:  `The 'create' command initiates the creation of a new note for a specific team in the user's HackMD account. The user can specify title, content and permissions, as well as the team path. If a team path or content isn't provided, the command will return an error.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		api := internal.GetHackMDClient()
 
@@ -79,13 +74,13 @@ var teamNotesCreateCmd = &cobra.Command{
 
 var teamNotesUpdateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "Update a note",
-	Long:  `Update a note. The note will be updated with the title provided. If no title is provided, a random title will be generated.`,
+	Short: "Update a note for a team",
+	Long:  `The 'update' command allows users to modify an existing note in a specific team in their HackMD account. The user can adjust the content and permissions for the note, and needs to provide the note ID and team path. If these aren't provided, the command will return an error.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		api := internal.GetHackMDClient()
 
 		content, _ := cmd.Flags().GetString("content")
-		noteID, _ := cmd.Flags().GetString("noteID")
+		noteID, _ := cmd.Flags().GetString("noteId")
 		teamPath, _ := cmd.Flags().GetString("teamPath")
 		readPermission, _ := cmd.Flags().GetString("readPermission")
 		writePermission, _ := cmd.Flags().GetString("writePermission")
@@ -118,12 +113,12 @@ var teamNotesUpdateCmd = &cobra.Command{
 
 var teamNotesDeleteCmd = &cobra.Command{
 	Use:   "delete",
-	Short: "Delete a note",
-	Long:  `Delete a note.`,
+	Short: "Delete a note from a team",
+	Long:  `The 'delete' command allows users to remove a specific note from a specified team in their HackMD account. The note and team are identified by their respective IDs. An error message is displayed if the note ID or team path is not provided.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		api := internal.GetHackMDClient()
 
-		noteID, _ := cmd.Flags().GetString("noteID")
+		noteID, _ := cmd.Flags().GetString("noteId")
 		teamPath, _ := cmd.Flags().GetString("teamPath")
 
 		if noteID == "" {
