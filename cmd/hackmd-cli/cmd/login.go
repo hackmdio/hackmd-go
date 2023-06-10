@@ -1,24 +1,31 @@
 /*
 Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
 import (
-	"github.com/spf13/cobra"
 	"github.com/hackmdio/hackmd-go/hackmd-cli/internal"
+	"github.com/spf13/cobra"
 )
 
 // loginCmd represents the login command
 var loginCmd = &cobra.Command{
 	Use:   "login",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Login to your HackMD account",
+	Long: `The 'login' command is used to authenticate and gain access to your HackMD account 
+from the command line interface (CLI). This command requires you to enter an access token 
+for authentication. 
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+To use the 'login' command:
+
+  $ hackmd-cli login
+
+You will be prompted to enter your HackMD access token. After successful authentication, 
+you will be logged in to your HackMD account and your account information will be displayed.
+
+It's important to keep your access token secure. Avoid using the 'login' command in scripts 
+or automated processes where your token might be exposed, and never store your token in 
+plain text.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		internal.GetMeFlow(true)
 	},
