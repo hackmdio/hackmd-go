@@ -77,6 +77,7 @@ type UpdateNoteOptions struct {
 	Content         string             `json:"content,omitempty"`
 	ReadPermission  NotePermissionRole `json:"readPermission,omitempty"`
 	WritePermission NotePermissionRole `json:"writePermission,omitempty"`
+	CommentPermission CommentPermissionType `json:"commentPermission,omitempty"`
 	Permalink       string             `json:"permalink,omitempty"`
 }
 

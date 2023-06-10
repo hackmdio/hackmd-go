@@ -99,16 +99,20 @@ var notesUpdateCmd = &cobra.Command{
 
 		noteId, _ := cmd.Flags().GetString("noteId")
 		content, _ := cmd.Flags().GetString("content")
+		readPermission, _ := cmd.Flags().GetString("readPermission")
+		writePermission, _ := cmd.Flags().GetString("writePermission")
+		commentPermission, _ := cmd.Flags().GetString("commentPermission")
 
 		if noteId == "" {
 			fmt.Println("Please provide a note ID")
 			return
 		}
 
-		// TODO: add permission fields and validation
-
 		err := api.UpdateNote(noteId, &HackMDClient.UpdateNoteOptions{
-			Content: content,
+			Content:           content,
+			ReadPermission:    HackMDClient.StringToNotePermissionRole(readPermission),
+			WritePermission:   HackMDClient.StringToNotePermissionRole(writePermission),
+			CommentPermission: HackMDClient.StringToCommentPermissionType(commentPermission),
 		})
 		if err != nil {
 			fmt.Println(err)
