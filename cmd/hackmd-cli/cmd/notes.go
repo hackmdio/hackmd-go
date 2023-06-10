@@ -18,13 +18,8 @@ import (
 // notesCmd represents the notes command
 var notesCmd = &cobra.Command{
 	Use:   "notes",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "List all notes of the user",
+	Long:  `The 'notes' command retrieves and lists all the notes associated with the user's HackMD account. It fetches the note list and provides an organized output which can be optionally formatted based on user's preference.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		api := internal.GetHackMDClient()
 
@@ -56,7 +51,7 @@ func processInput(r io.Reader) string {
 var notesCreateCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Create a new note",
-	Long:  `Create a new note. The note will be created with the title provided. If no title is provided, a random title will be generated.`,
+	Long:  `The 'create' command initiates the creation of a new note in the user's HackMD account. The user can specify title and content as well as the permissions for reading, writing, and commenting. If no content is provided, it takes standard input. The note creation might fail in case of errors, and the system handles them gracefully.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		api := internal.GetHackMDClient()
 
@@ -92,8 +87,8 @@ var notesCreateCmd = &cobra.Command{
 
 var notesUpdateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "Update a note",
-	Long:  `Update a note. The note will be updated with the title provided. If no title is provided, a random title will be generated.`,
+	Short: "Update an existing note",
+	Long:  `The 'update' command allows users to modify an existing note in their HackMD account. The user can change the content of the note and adjust the permissions for reading, writing, and commenting. The command requires a note ID, and returns an error if no ID is provided or if any issues occur during the update process.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		api := internal.GetHackMDClient()
 
@@ -125,8 +120,8 @@ var notesUpdateCmd = &cobra.Command{
 
 var notesDeleteCmd = &cobra.Command{
 	Use:   "delete",
-	Short: "Delete a note",
-	Long:  `Delete a note.`,
+	Short: "Delete a specific note",
+	Long:  `The 'delete' command allows users to remove a specific note from their HackMD account. The note is identified by its ID. An error message is displayed if a note ID is not provided or if any problems occur during the deletion process.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		api := internal.GetHackMDClient()
 
