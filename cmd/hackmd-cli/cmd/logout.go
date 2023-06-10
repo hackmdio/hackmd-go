@@ -1,26 +1,27 @@
 /*
 Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
 import (
 	"fmt"
 
-	"github.com/spf13/cobra"
 	"github.com/hackmdio/hackmd-go/hackmd-cli/internal"
+	"github.com/spf13/cobra"
 )
 
 // logoutCmd represents the logout command
 var logoutCmd = &cobra.Command{
 	Use:   "logout",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Logout from your HackMD account",
+	Long: `The 'logout' command is used to log out from your HackMD account on the 
+command line interface (CLI). This command effectively removes your locally stored 
+access token, which means you'll have to use the 'login' command and enter your 
+access token again to authenticate the next time you want to perform any operation 
+that requires authentication.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+After running this command, your HackMD access token will be removed from the 
+locally stored configuration and a message confirming your logout will be displayed.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		internal.RemoveAccessTokenFromConfig()
 

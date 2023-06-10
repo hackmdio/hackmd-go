@@ -16,10 +16,6 @@ var loginCmd = &cobra.Command{
 from the command line interface (CLI). This command requires you to enter an access token 
 for authentication. 
 
-To use the 'login' command:
-
-  $ hackmd-cli login
-
 You will be prompted to enter your HackMD access token. After successful authentication, 
 you will be logged in to your HackMD account and your account information will be displayed.
 
