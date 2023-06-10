@@ -2,12 +2,10 @@ module github.com/hackmdio/hackmd-go/cmd/hackmd-cli
 
 go 1.20
 
-replace github.com/hackmdio/hackmd-go => ../..
-
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.6
 	github.com/charmbracelet/lipgloss v0.7.1
-	github.com/hackmdio/hackmd-go v0.0.0-20230501103623-0a653bae6724
+	github.com/hackmdio/hackmd-go v0.1.0
 	github.com/jedib0t/go-pretty/v6 v6.4.6
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.15.0
