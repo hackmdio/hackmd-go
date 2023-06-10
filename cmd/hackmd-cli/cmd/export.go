@@ -14,13 +14,12 @@ import (
 // exportCmd represents the export command
 var exportCmd = &cobra.Command{
 	Use:   "export",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Export a specific HackMD note's content",
+	Long: `The 'export' command retrieves and displays the content of a specific HackMD note, identified by its unique ID. This can be useful when you want to manipulate or save the note's content outside of the HackMD environment.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+To execute this command, you must provide the ID of the note you wish to export. If the provided ID corresponds to an existing note, the content of the note will be displayed. 
+
+Note that you must be logged in and have the appropriate permissions to access the note you're trying to export.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		api := internal.GetHackMDClient()
 
