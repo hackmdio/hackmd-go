@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/hackmdio/hackmd-go/hackmd-cli/internal"
 	"github.com/spf13/cobra"
 )
@@ -12,13 +13,8 @@ import (
 // whoamiCmd represents the whoami command
 var whoamiCmd = &cobra.Command{
 	Use:   "whoami",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Display logged-in user's information",
+	Long:  `The 'whoami' command displays the information of the currently logged-in user in the HackMD account. If the user is not logged in, the command will return a message prompting the user to log in.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if internal.IsAccessTokenPresent() {
 			internal.GetMeFlow(false)

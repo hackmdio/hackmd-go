@@ -12,7 +12,7 @@ import (
 var teamsCmd = &cobra.Command{
 	Use:   "teams",
 	Short: "List all teams",
-	Long:  `List all teams in your HackMD account.`,
+	Long:  `The 'teams' command retrieves and lists all the teams associated with the user's HackMD account. The command requires an active user session. If not logged in, it will return an error.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		api := internal.GetHackMDClient()
 		output := cmd.Flag("output").Value.String()
